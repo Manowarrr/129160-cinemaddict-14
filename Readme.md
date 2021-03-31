@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Алексей Лыженков](https://up.htmlacademy.ru/ecmascript/14/user/129160).
-* Наставник: `Неизвестно`.
+* Наставник: [Владимир Коршунов](https://up.htmlacademy.ru/javascript/22/user/83596).
 
 ---
 
