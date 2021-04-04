@@ -1,17 +1,17 @@
 import dayjs from 'dayjs';
 
-export const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
+export const getRandomInteger = (minInteger = 0, maxInteger = 1) => {
+  const lower = Math.ceil(Math.min(minInteger, maxInteger));
+  const upper = Math.floor(Math.max(minInteger, maxInteger));
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-export const getRandomFloat = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
+export const getRandomFloat = (minFloat = 0, maxFloat = 1) => {
+  const lower = Math.ceil(Math.min(minFloat, maxFloat));
+  const upper = Math.floor(Math.max(minFloat, maxFloat));
 
-  return (lower + Math.random() * (upper - lower + 1)).toFixed(1);
+  return parseFloat((lower + Math.random() * (upper - lower + 1)).toFixed(1));
 };
 
 export const createText = (maxSentenceCount) => {

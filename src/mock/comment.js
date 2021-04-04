@@ -1,6 +1,13 @@
 import dayjs from 'dayjs';
 import { createText, getRandomInteger, generateDate } from '../utils.js';
-import { PEOPLE, EMOTIONS } from '../const.js';
+import { PEOPLE } from '../const.js';
+
+const EMOTIONS = [
+  './images/emoji/smile.png',
+  './images/emoji/sleeping.png',
+  './images/emoji/puke.png',
+  './images/emoji/angry.png',
+];
 
 let id = 0;
 

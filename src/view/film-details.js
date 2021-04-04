@@ -2,9 +2,7 @@ import dayjs from 'dayjs';
 import { createFilmCommentTemplate } from './comment.js';
 
 const createGenresTemplate = (genres) => {
-  const genresString = genres.reduce((string, genre) => {
-    return string + `<span class="film-details__genre">${genre}</span>`;
-  }, '');
+  const genresString = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
 
   return `<td class="film-details__term">${genres.length > 1 ? 'Genres' : 'Genre'}</td>
           <td class="film-details__cell">
@@ -45,11 +43,9 @@ export const createFilmDetailsTemplate = (film) => {
 
   const commentsString = film.comments.map((comment) => {
     return createFilmCommentTemplate(comment);
-  }).reduce((string, comment) => {
-    return string + comment;
-  }, '');
+  }).join('');
 
-  return `<section class="film-details visually-hidden">
+  return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
       <div class="film-details__close">

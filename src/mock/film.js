@@ -1,7 +1,58 @@
-import dayjs from 'dayjs';
 import { getRandomInteger, getRandomFloat, createText, generateDate } from '../utils.js';
-import { TITLES, POSTERS, AGE_RATINGS, PEOPLE, GENRES, COUNTRIES } from '../const.js';
+import { PEOPLE } from '../const.js';
 import { generateComment } from './comment.js';
+
+const GENRES = [
+  'comedy',
+  'horror',
+  'action',
+  'thriller',
+  'drama',
+];
+
+const COUNTRIES = [
+  'USA',
+  'England',
+  'Japan',
+  'South Korea',
+];
+
+const TITLES = [
+  'Scent of a woman',
+  'Heat',
+  'Bad boys',
+  'Alien',
+  'Shawshank redemption',
+  'Green mile',
+  'American beauty',
+  'Goodfellas',
+  'The Godfather',
+  'Nobody',
+  'Toy story',
+  'Cocaine',
+  'Usual Suspects',
+  'Wolf from Wall Street',
+  'Donny Brasco',
+  'Deadpool',
+];
+
+const POSTERS = [
+  './images/posters/made-for-each-other.png',
+  './images/posters/popeye-meets-sinbad.png',
+  './images/posters/sagebrush-trail.jpg',
+  './images/posters/santa-claus-conquers-the-martians.jpg',
+  './images/posters/the-dance-of-life.jpg',
+  './images/posters/the-great-flamarion.jpg',
+  './images/posters/the-man-with-the-golden-arm.jpg',
+];
+
+const AGE_RATINGS = [
+  '0+',
+  '6+',
+  '12+',
+  '16+',
+  '18+',
+];
 
 let id = 0;
 
