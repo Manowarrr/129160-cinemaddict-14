@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import { createFilmCommentTemplate } from './comment.js';
+import { createElement } from '../utils.js';
+import FilmCommentView from './comment';
 
 const createGenresTemplate = (genres) => {
   const genresString = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
@@ -20,7 +21,7 @@ const createFilmStatesButtons = (watchlist, alreadyWatched, favorite) => {
          <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
-export const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film) => {
   const {
     alternativeTitle,
     ageRating,
@@ -42,7 +43,7 @@ export const createFilmDetailsTemplate = (film) => {
   const filmsStateButtonString = createFilmStatesButtons(watchlist, alreadyWatched, favorite);
 
   const commentsString = film.comments.map((comment) => {
-    return createFilmCommentTemplate(comment);
+    return new FilmCommentView(comment).getTemplate();
   }).join('');
 
   return `<section class="film-details">
@@ -153,3 +154,36 @@ export const createFilmDetailsTemplate = (film) => {
   </form>
 </section>`.trim();
 };
+
+export default class FilmDetailsCard {
+  constructor(film) {
+    this._element = null;
+    this._film = film;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  setClosePopupEvent(body) {
+    const closePopupButton = this._element.querySelector('.film-details__close-btn');
+
+    closePopupButton.addEventListener('click', () => {
+      this.getElement().remove();
+      this.removeElement();
+      body.classList.remove('hide-overflow');
+    });
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

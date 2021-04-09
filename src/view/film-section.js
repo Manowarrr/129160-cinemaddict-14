@@ -1,24 +1,23 @@
 import { createElement } from '../utils.js';
 
-const createSiteMenuTemplate = () => {
+const createFilmSectionTemplate = () => {
   return (
-    `<nav class="main-navigation">
-      <a href="#stats" class="main-navigation__additional">Stats</a>
-    </nav>`.trim()
-  );
+    `<section class="films">
+    </section>`
+  ).trim();
 };
 
-export default class SiteMenu {
+export default class FilmSection {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSiteMenuTemplate();
+    return createFilmSectionTemplate();
   }
 
   getElement() {
-    if (!this._element) {
+    if(!this._element) {
       this._element = createElement(this.getTemplate());
     }
 
