@@ -60,7 +60,7 @@ const allFilmListComponent = new FilmListView();
 renderElement(
   filmSectionComponent.getElement(),
   allFilmListComponent.getElement(),
-  RenderPosition.AFTERBEGIN,
+  RenderPosition.BEFOREEND,
 );
 
 renderElement(
@@ -70,6 +70,36 @@ renderElement(
 );
 
 const allFilmContainer = allFilmListComponent.getFilmListContainer();
+
+/* TOP RATED FILM LIST */
+const topRatedFilmListComponent = new FilmListView(true);
+
+renderElement(
+  filmSectionComponent.getElement(),
+  topRatedFilmListComponent.getElement(),
+  RenderPosition.BEFOREEND,
+);
+
+renderElement(
+  topRatedFilmListComponent.getElement(),
+  new FilmListTitleView(false, 'Top rated').getElement(),
+  RenderPosition.AFTERBEGIN,
+);
+
+/* ALL FILM LIST */
+const mostCommentedFilmListComponent = new FilmListView(true);
+
+renderElement(
+  filmSectionComponent.getElement(),
+  mostCommentedFilmListComponent.getElement(),
+  RenderPosition.BEFOREEND,
+);
+
+renderElement(
+  mostCommentedFilmListComponent.getElement(),
+  new FilmListTitleView(false, 'Most commented').getElement(),
+  RenderPosition.AFTERBEGIN,
+);
 
 /* USER TITLE */
 renderElement(
@@ -85,7 +115,7 @@ renderElement(
   RenderPosition.BEFOREEND,
 );
 
-/* FILMS RENDERING */
+/* ALL FILMS RENDERING */
 for(let i = 1; i <= Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
   const filmCardComponent = new FilmCardView(films[i]);
 
@@ -131,3 +161,42 @@ if (films.length > FILM_COUNT_PER_STEP) {
     }
   });
 }
+
+/* TOP RATED FILMS RENDERING */
+
+const topRatedFilmContainer = topRatedFilmListComponent.getFilmListContainer();
+
+films.sort((a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating);
+
+const topRatedFilms = films.slice(0, 2);
+
+topRatedFilms.forEach((film) => {
+  const filmCardComponent = new FilmCardView(film);
+
+  renderElement(
+    topRatedFilmContainer,
+    filmCardComponent.getElement(),
+    RenderPosition.BEFOREEND);
+
+  filmCardComponent.setOpenPopupEvent(siteBodyElement);
+});
+
+/* MOST COMMENTED FILMS RENDERING */
+
+const mostCommentedFilmContainer = mostCommentedFilmListComponent.getFilmListContainer();
+
+films.sort((a, b) => b.comments.length - a.comments.length);
+
+const mostCommentedFilms = films.slice(0, 2);
+
+mostCommentedFilms.forEach((film) => {
+  const filmCardComponent = new FilmCardView(film);
+
+  renderElement(
+    mostCommentedFilmContainer,
+    filmCardComponent.getElement(),
+    RenderPosition.BEFOREEND);
+
+  filmCardComponent.setOpenPopupEvent(siteBodyElement);
+});
+
