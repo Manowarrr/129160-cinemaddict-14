@@ -13,3 +13,5 @@ export const PEOPLE = [
   'Ryan Gosling',
   'Ryan Reynolds',
 ];
+
+export const BODY = document.querySelector('body');

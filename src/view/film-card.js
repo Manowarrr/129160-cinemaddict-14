@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { createElement, renderElement, RenderPosition } from '../utils.js';
 import FilmCardButtonView from './film-card-button.js';
 import FilmDetailsCardView from './film-details.js';
+import { BODY } from '../const.js';
 
 const createFilmCardTemplate = (film) => {
   const { title, totalRating, release, description, runtime, poster } = film.filmInfo;
@@ -47,7 +48,7 @@ export default class FilmCard {
     return this._element;
   }
 
-  setOpenPopupEvent(body) {
+  setOpenPopupEvent() {
     if(!this._element) {
       this._element = createElement(this.getTemplate());
     }
@@ -59,15 +60,15 @@ export default class FilmCard {
     [filmImage, filmTitle, filmComments].forEach((element) => {
       element.addEventListener('click', () => {
         const filmDetailsPopup = new FilmDetailsCardView(this._film);
-        body.classList.add('hide-overflow');
+        BODY.classList.add('hide-overflow');
 
         renderElement(
-          body,
+          BODY,
           filmDetailsPopup.getElement(),
           RenderPosition.BEFOREEND,
         );
 
-        filmDetailsPopup.setClosePopupEvent(body);
+        filmDetailsPopup.setClosePopupEvent();
       });
     });
   }

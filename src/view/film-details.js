@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { createElement } from '../utils.js';
 import FilmCommentView from './comment';
+import { BODY } from '../const.js';
 
 const createGenresTemplate = (genres) => {
   const genresString = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
@@ -21,7 +22,7 @@ const createFilmStatesButtons = (watchlist, alreadyWatched, favorite) => {
          <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
-const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsCardTemplate = (film) => {
   const {
     alternativeTitle,
     ageRating,
@@ -162,7 +163,7 @@ export default class FilmDetailsCard {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film);
+    return createFilmDetailsCardTemplate(this._film);
   }
 
   getElement() {
@@ -173,17 +174,29 @@ export default class FilmDetailsCard {
     return this._element;
   }
 
-  setClosePopupEvent(body) {
-    const closePopupButton = this._element.querySelector('.film-details__close-btn');
+  setClosePopupEvent() {
+    const removeElement = this.removeElement.bind(this);
 
+    const onEscKeyDown = (evt) => {
+      if (evt.key === 'Escape' || evt.key === 'Esc') {
+        evt.preventDefault();
+        removeElement();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    document.addEventListener('keydown', onEscKeyDown);
+
+    const closePopupButton = this._element.querySelector('.film-details__close-btn');
     closePopupButton.addEventListener('click', () => {
-      this.getElement().remove();
-      this.removeElement();
-      body.classList.remove('hide-overflow');
+      document.removeEventListener('keydown', onEscKeyDown);
+      removeElement();
     });
   }
 
   removeElement() {
+    this._element.remove();
+    BODY.classList.remove('hide-overflow');
     this._element = null;
   }
 }
