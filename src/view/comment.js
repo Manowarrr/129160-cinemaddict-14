@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 
 const createFilmCommentTemplate = (comment) => {
   const {text, author, date, emotion} = comment;
@@ -20,25 +20,13 @@ const createFilmCommentTemplate = (comment) => {
   ).trim();
 };
 
-export default class FilmComment {
+export default class FilmComment extends AbstractView {
   constructor(comment) {
-    this._element = null;
+    super();
     this._comment = comment;
   }
 
   getTemplate() {
     return createFilmCommentTemplate(this._comment);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
