@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 import FilmCommentView from './comment';
-import { BODY } from '../const.js';
 
 const createGenresTemplate = (genres) => {
   const genresString = genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join('');
@@ -156,47 +155,32 @@ const createFilmDetailsCardTemplate = (film) => {
 </section>`.trim();
 };
 
-export default class FilmDetailsCard {
+export default class FilmDetailsCard extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmDetailsCardTemplate(this._film);
   }
 
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  _clickHandler(evt) {
+    evt.preventDefault();
 
-    return this._element;
+    this._callback.click();
   }
 
-  setClosePopupEvent() {
-    const removeElement = this.removeElement.bind(this);
+  setClickHandler(callback) {
+    this._callback.click = callback;
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        removeElement();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    document.addEventListener('keydown', onEscKeyDown);
-
-    const closePopupButton = this._element.querySelector('.film-details__close-btn');
-    closePopupButton.addEventListener('click', () => {
-      document.removeEventListener('keydown', onEscKeyDown);
-      removeElement();
-    });
+    this.getElement()
+      .querySelector('.film-details__close-btn')
+      .addEventListener('click', this._clickHandler);
   }
 
   removeElement() {
-    this._element.remove();
-    BODY.classList.remove('hide-overflow');
     this._element = null;
   }
 }

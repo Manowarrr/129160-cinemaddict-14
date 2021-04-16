@@ -1,4 +1,4 @@
-import { createElement } from '../utils.js';
+import AbstractView from './abstract.js';
 
 const createfilmCardButtonTemplate = (type, isActive) => {
   const BUTTON_TYPES = {
@@ -19,26 +19,14 @@ const createfilmCardButtonTemplate = (type, isActive) => {
   );
 };
 
-export default class FilmCardButton {
+export default class FilmCardButton extends AbstractView {
   constructor(type, isActive) {
-    this._element = null;
+    super();
     this._type = type;
     this._isActive = isActive;
   }
 
   getTemplate() {
     return createfilmCardButtonTemplate(this._type, this._isActive);
-  }
-
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
-import { createElement, renderElement, RenderPosition } from '../utils.js';
 import FilmCardButtonView from './film-card-button.js';
-import FilmDetailsCardView from './film-details.js';
-import { BODY } from '../const.js';
+import AbstractView from './abstract.js';
 
 const createFilmCardTemplate = (film) => {
   const { title, totalRating, release, description, runtime, poster } = film.filmInfo;
@@ -30,50 +28,31 @@ const createFilmCardTemplate = (film) => {
   ).trim();
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
-    this._element = null;
+    super();
     this._film = film;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
+  _clickHandler(evt) {
+    evt.preventDefault();
 
-    return this._element;
+    this._callback.click();
   }
 
-  setOpenPopupEvent() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
+  setClickHandler(callback) {
+    this._callback.click = callback;
     const filmImage = this._element.querySelector('.film-card__poster');
     const filmTitle = this._element.querySelector('.film-card__title');
     const filmComments = this._element.querySelector('.film-card__comments');
 
     [filmImage, filmTitle, filmComments].forEach((element) => {
-      element.addEventListener('click', () => {
-        const filmDetailsPopup = new FilmDetailsCardView(this._film);
-        BODY.classList.add('hide-overflow');
-
-        renderElement(
-          BODY,
-          filmDetailsPopup.getElement(),
-          RenderPosition.BEFOREEND,
-        );
-
-        filmDetailsPopup.setClosePopupEvent();
-      });
+      element.addEventListener('click', this._clickHandler);
     });
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

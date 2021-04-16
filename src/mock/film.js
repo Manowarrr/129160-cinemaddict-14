@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomFloat, createText, generateDate } from '../utils.js';
+import { getRandomInteger, getRandomFloat, createText, generateDate } from '../utils/common.js';
 import { PEOPLE } from '../const.js';
 import { generateComment } from './comment.js';
 

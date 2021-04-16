@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createText, getRandomInteger, generateDate } from '../utils.js';
+import { createText, getRandomInteger, generateDate } from '../utils/common.js';
 import { PEOPLE } from '../const.js';
 
 const EMOTIONS = [
