@@ -10,14 +10,14 @@ const createGenresTemplate = (genres) => {
             ${genresString}`;
 };
 
-const createFilmStatesButtons = (watchlist, alreadyWatched, favorite) => {
-  return `<input type="checkbox" ${watchlist ? 'checked' : ''} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+const createFilmStatesButtons = (isWatchlist, isWatched, isFavorite) => {
+  return `<input type="checkbox" ${isWatchlist ? 'checked' : ''} class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
          <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-         <input type="checkbox" ${alreadyWatched ? 'checked' : ''} class="film-details__control-input visually-hidden" id="watched" name="watched">
+         <input type="checkbox" ${isWatched ? 'checked' : ''} class="film-details__control-input visually-hidden" id="watched" name="watched">
          <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-         <input type="checkbox" ${favorite ? 'checked' : ''} class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+         <input type="checkbox" ${isFavorite ? 'checked' : ''} class="film-details__control-input visually-hidden" id="favorite" name="favorite">
          <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>`;
 };
 
@@ -37,10 +37,10 @@ const createFilmDetailsCardTemplate = (film) => {
     genres,
   } = film.filmInfo;
 
-  const { watchlist, alreadyWatched, favorite } = film.userDetails;
+  const { isWatchlist, isWatched, isFavorite } = film.userDetails;
   const genresString = createGenresTemplate(genres);
 
-  const filmsStateButtonString = createFilmStatesButtons(watchlist, alreadyWatched, favorite);
+  const filmsStateButtonString = createFilmStatesButtons(isWatchlist, isWatched, isFavorite);
 
   const commentsString = film.comments.map((comment) => {
     return new FilmCommentView(comment).getTemplate();
@@ -160,6 +160,9 @@ export default class FilmDetailsCard extends AbstractView {
     super();
     this._film = film;
     this._clickHandler = this._clickHandler.bind(this);
+    this._watchlistClickHandler = this._watchlistClickHandler.bind(this);
+    this._watchedClickHandler = this._watchedClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -178,6 +181,39 @@ export default class FilmDetailsCard extends AbstractView {
     this.getElement()
       .querySelector('.film-details__close-btn')
       .addEventListener('click', this._clickHandler);
+  }
+
+  _watchedClickHandler() {
+    this._callback.watchedClick();
+  }
+
+  _watchlistClickHandler() {
+    this._callback.watchlistClick();
+  }
+
+  _favoriteClickHandler() {
+    this._callback.favoriteClick();
+  }
+
+  setWatchedClickHandler(callback) {
+    this._callback.watchedClick = callback;
+    this.getElement()
+      .querySelector('#watched')
+      .addEventListener('click', this._watchedClickHandler);
+  }
+
+  setWatchlistClickHandler(callback) {
+    this._callback.watchlistClick = callback;
+    this.getElement()
+      .querySelector('.film-details__control-label--watchlist')
+      .addEventListener('click', this._watchlistClickHandler);
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement()
+      .querySelector('.film-details__control-label--favorite')
+      .addEventListener('click', this._favoriteClickHandler);
   }
 
   removeElement() {
