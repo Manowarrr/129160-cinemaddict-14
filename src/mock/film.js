@@ -1,6 +1,7 @@
 import { getRandomInteger, getRandomFloat, createText, generateDate } from '../utils/common.js';
 import { PEOPLE } from '../const.js';
 import { generateComment } from './comment.js';
+import { nanoid } from 'nanoid';
 
 const GENRES = [
   'comedy',
@@ -54,14 +55,12 @@ const AGE_RATINGS = [
   '18+',
 ];
 
-let id = 0;
-
 export const generateFilm = () => {
   const alreadyWatched = Boolean(getRandomInteger(0, 1));
   const alreadyWatchedDate = alreadyWatched ? generateDate(-1) : null;
 
   return {
-    id: ++id,
+    id: nanoid(),
     comments: new Array(getRandomInteger(0, 5)).fill().map(() => generateComment()),
     filmInfo: {
       title: TITLES[getRandomInteger(0, TITLES.length - 1)],
@@ -81,10 +80,10 @@ export const generateFilm = () => {
       description: createText(15),
     },
     userDetails: {
-      watchlist: Boolean(getRandomInteger(0, 1)),
-      alreadyWatched: alreadyWatched,
+      isWatchlist: Boolean(getRandomInteger(0, 1)),
+      isWatched: alreadyWatched,
       watchingDate: alreadyWatchedDate,
-      favorite: Boolean(getRandomInteger(0, 1)),
+      isFavorite: Boolean(getRandomInteger(0, 1)),
     },
   };
 };

@@ -2,9 +2,9 @@ import AbstractView from './abstract.js';
 
 const createfilmCardButtonTemplate = (type, isActive) => {
   const BUTTON_TYPES = {
-    watchlist: 'add-to-watchlist',
-    alreadyWatched: 'mark-as-watched',
-    favorite: 'favorite',
+    isWatchlist: 'add-to-watchlist',
+    isWatched: 'mark-as-watched',
+    isFavorite: 'favorite',
   };
 
   return (
