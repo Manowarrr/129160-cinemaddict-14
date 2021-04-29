@@ -13,3 +13,9 @@ export const PEOPLE = [
   'Ryan Gosling',
   'Ryan Reynolds',
 ];
+
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};
