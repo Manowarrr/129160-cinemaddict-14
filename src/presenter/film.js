@@ -124,11 +124,12 @@ export default class Film {
   }
 
   _handleFilmCardClick() {
+    this._changeMode();
+
     this._filmDetailsCardComponent = new FilmDetailsCardView(this._film);
 
     document.addEventListener('keydown', this._escKeyDownHandler);
 
-    this._changeMode();
     this._mode = Mode.OPENED;
 
     this._filmDetailsCardComponent.setClickHandler(this._removeFilmDetailsPopup);

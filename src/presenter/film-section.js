@@ -200,9 +200,8 @@ export default class FilmSection {
 
   _handlePopupMode() {
     Object
-      .keys(this._filmPresenter)
-      .forEach((key) => Object.values(this._filmPresenter[key])
-        .forEach((presenter) => presenter.resetView()));
+      .values(this._filmPresenter.ALL)
+      .forEach((presenter) => presenter.resetView());
   }
 
   _renderSort() {
@@ -268,7 +267,5 @@ export default class FilmSection {
       film,
       'COMMENTED',
     ));
-
-    console.dir(this._filmPresenter);
   }
 }
