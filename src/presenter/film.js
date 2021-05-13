@@ -1,6 +1,7 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailsCardView from '../view/film-details.js';
 import { render, RenderPosition, remove, replace } from '../utils/render.js';
+import { UserAction, UpdateType, FilterType } from '../const.js';
 
 const siteBodyElement = document.querySelector('body');
 const Mode = {
@@ -9,10 +10,11 @@ const Mode = {
 };
 
 export default class Film {
-  constructor(filmContainer, changeData, changeMode) {
+  constructor(filmContainer, changeData, changeMode, filterModel) {
     this._filmContainer = filmContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._filterModel = filterModel;
 
     this._filmCardComponent = null;
     this._filmDetailsCardComponent = null;
@@ -24,6 +26,7 @@ export default class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    this._handleUpdateCommentClick = this._handleUpdateCommentClick.bind(this);
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._removeFilmDetailsPopup = this._removeFilmDetailsPopup.bind(this);
@@ -59,7 +62,10 @@ export default class Film {
   }
 
   _handleWatchedClick() {
+    const updateType = this._filterModel.getFilter() === FilterType.HISTORY ? UpdateType.MINOR : UpdateType.PATCH;
     this._changeData(
+      UserAction.UPDATE_FILM,
+      updateType,
       Object.assign(
         {},
         this._film,
@@ -76,7 +82,10 @@ export default class Film {
   }
 
   _handleWatchlistClick() {
+    const updateType = this._filterModel.getFilter() === FilterType.WATCHLIST ? UpdateType.MINOR : UpdateType.PATCH;
     this._changeData(
+      UserAction.UPDATE_FILM,
+      updateType,
       Object.assign(
         {},
         this._film,
@@ -93,7 +102,10 @@ export default class Film {
   }
 
   _handleFavoriteClick() {
+    const updateType = this._filterModel.getFilter() === FilterType.FAVORITES ? UpdateType.MINOR : UpdateType.PATCH;
     this._changeData(
+      UserAction.UPDATE_FILM,
+      updateType,
       Object.assign(
         {},
         this._film,
@@ -104,6 +116,20 @@ export default class Film {
             isWatchlist: this._film.userDetails.isWatchlist,
             watchingDate: this._film.userDetails.watchingDate,
           },
+        },
+      ),
+    );
+  }
+
+  _handleUpdateCommentClick(comments) {
+    this._changeData(
+      UserAction.UPDATE_COMMENTS,
+      UpdateType.MINOR,
+      Object.assign(
+        {},
+        this._film,
+        {
+          comments,
         },
       ),
     );
@@ -136,6 +162,7 @@ export default class Film {
     this._filmDetailsCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._filmDetailsCardComponent.setWatchedClickHandler(this._handleWatchedClick);
     this._filmDetailsCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+    this._filmDetailsCardComponent.setUpdateCommentClickHandler(this._handleUpdateCommentClick);
 
     render(
       siteBodyElement,
