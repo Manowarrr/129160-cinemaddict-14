@@ -19,3 +19,21 @@ export const SortType = {
   DATE: 'date',
   RATING: 'rating',
 };
+
+export const FilterType = {
+  ALL: 'all',
+  FAVORITES: 'favorites',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+};
+
+export const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  UPDATE_COMMENTS: 'UPDATE_COMMENTS',
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};

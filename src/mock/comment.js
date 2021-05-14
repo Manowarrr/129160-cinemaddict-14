@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { createText, getRandomInteger, generateDate } from '../utils/common.js';
 import { PEOPLE } from '../const.js';
+import { nanoid } from 'nanoid';
 
 const EMOTIONS = [
   './images/emoji/smile.png',
@@ -9,11 +10,9 @@ const EMOTIONS = [
   './images/emoji/angry.png',
 ];
 
-let id = 0;
-
 export const generateComment = () => {
   return {
-    id: ++id,
+    id: nanoid(),
     text: createText(1),
     author: PEOPLE[getRandomInteger(0, PEOPLE.length - 1)],
     date: dayjs(generateDate(-1)).format('YYYY/DD/MM HH:mm'),
