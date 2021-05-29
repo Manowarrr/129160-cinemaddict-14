@@ -6,7 +6,7 @@ const createFilterItemTemplate = (filter, currentFilter) => {
   return (
     `<a
       href="#${type}"
-      data-sorttype="${type}"
+      data-filtertype="${type}"
       class="main-navigation__item  ${currentFilter === type ? 'main-navigation__item--active' : ''}">
       ${name}
     <span
@@ -24,8 +24,8 @@ const createFilterTemplate = (filterItems, currentFilter) => {
 
   return (
     `<div class="main-navigation__items">
-      ${filterItemsTemplate}
-    </div>`
+        ${filterItemsTemplate}
+      </div>`
   ).trim();
 };
 
@@ -41,8 +41,15 @@ export default class Filter extends AbstractView {
   _filterTypeChangeHandler(evt) {
     evt.preventDefault();
     const linkClicked = evt.target.closest('a');
+    let isStatisticOpened = false;
     if(!linkClicked) return;
-    this._callback.filterTypeChange(evt.target.dataset.sorttype);
+    if(this.getElement().nextElementSibling.classList.contains('main-navigation__item--active')) {
+      isStatisticOpened = true;
+      this.getElement()
+        .nextElementSibling
+        .classList.remove('main-navigation__item--active');
+    }
+    this._callback.filterTypeChange(evt.target.dataset.filtertype, isStatisticOpened);
   }
 
   setFilterTypeChangeHandler(callback) {
