@@ -1,7 +1,8 @@
 import FilmCardView from '../view/film-card.js';
 import FilmDetailsCardView from '../view/film-details.js';
 import { render, RenderPosition, remove, replace } from '../utils/render.js';
-import { UserAction, UpdateType, FilterType } from '../const.js';
+import { UserAction, UpdateType, FilterType, PopupState } from '../const.js';
+import dayjs from 'dayjs';
 
 const siteBodyElement = document.querySelector('body');
 const Mode = {
@@ -10,11 +11,12 @@ const Mode = {
 };
 
 export default class Film {
-  constructor(filmContainer, changeData, changeMode, filterModel) {
+  constructor(filmContainer, changeData, changeMode, filterModel, api) {
     this._filmContainer = filmContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
     this._filterModel = filterModel;
+    this._api = api;
 
     this._filmCardComponent = null;
     this._filmDetailsCardComponent = null;
@@ -26,7 +28,8 @@ export default class Film {
     this._handleWatchedClick = this._handleWatchedClick.bind(this);
     this._handleWatchlistClick = this._handleWatchlistClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    this._handleUpdateCommentClick = this._handleUpdateCommentClick.bind(this);
+    this._handleAddCommentClick = this._handleAddCommentClick.bind(this);
+    this._handleDeleteCommentClick = this._handleDeleteCommentClick.bind(this);
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this._removeFilmDetailsPopup = this._removeFilmDetailsPopup.bind(this);
@@ -34,6 +37,7 @@ export default class Film {
 
   init(film) {
     this._film = film;
+    this._comments = null;
 
     const prevFilmComponent = this._filmCardComponent;
 
@@ -73,7 +77,7 @@ export default class Film {
           userDetails: {
             isWatched: !this._film.userDetails.isWatched,
             isWatchlist: this._film.userDetails.isWatchlist,
-            watchingDate: this._film.userDetails.watchingDate,
+            watchingDate: dayjs(),
             isFavorite: this._film.userDetails.isFavorite,
           },
         },
@@ -121,18 +125,43 @@ export default class Film {
     );
   }
 
-  _handleUpdateCommentClick(comments) {
-    this._changeData(
-      UserAction.UPDATE_COMMENTS,
-      UpdateType.MINOR,
-      Object.assign(
-        {},
-        this._film,
-        {
-          comments,
-        },
-      ),
-    );
+  _handleDeleteCommentClick(commentId, updatedFilm) {
+    this._filmDetailsCardComponent.setState(PopupState.DISABLEDCOMMENT);
+    this._api.deleteComment(commentId)
+      .then(() => {
+        this._filmDetailsCardComponent.setState(PopupState.DELETE, [], commentId);
+        this._changeData(
+          UserAction.UPDATE_COMMENTS,
+          UpdateType.MINOR,
+          Object.assign(
+            {},
+            updatedFilm,
+          ),
+        );
+      })
+      .catch(() => {
+        this._filmDetailsCardComponent.setState(PopupState.DELETEERROR);
+      });
+  }
+
+  _handleAddCommentClick(updatedFilm, comment) {
+    this._filmDetailsCardComponent.setState(PopupState.DISABLEDFORM);
+    this._api.addComment(updatedFilm, comment)
+      .then((result) => {
+        this._comments = result.comments;
+        this._filmDetailsCardComponent.setState(PopupState.ADD, this._comments);
+        this._changeData(
+          UserAction.UPDATE_COMMENTS,
+          UpdateType.MINOR,
+          Object.assign(
+            {},
+            result.film,
+          ),
+        );
+      })
+      .catch(() => {
+        this._filmDetailsCardComponent.setState(PopupState.ADDERROR);
+      });
   }
 
   _removeFilmDetailsPopup() {
@@ -152,23 +181,28 @@ export default class Film {
   _handleFilmCardClick() {
     this._changeMode();
 
-    this._filmDetailsCardComponent = new FilmDetailsCardView(this._film);
+    this._api.getComments(this._film.id)
+      .then((comments) => {
+        this._comments = comments;
+        this._filmDetailsCardComponent = new FilmDetailsCardView(this._film, this._comments);
 
-    document.addEventListener('keydown', this._escKeyDownHandler);
+        document.addEventListener('keydown', this._escKeyDownHandler);
 
-    this._mode = Mode.OPENED;
+        this._mode = Mode.OPENED;
 
-    this._filmDetailsCardComponent.setClickHandler(this._removeFilmDetailsPopup);
-    this._filmDetailsCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
-    this._filmDetailsCardComponent.setWatchedClickHandler(this._handleWatchedClick);
-    this._filmDetailsCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
-    this._filmDetailsCardComponent.setUpdateCommentClickHandler(this._handleUpdateCommentClick);
+        this._filmDetailsCardComponent.setClickHandler(this._removeFilmDetailsPopup);
+        this._filmDetailsCardComponent.setFavoriteClickHandler(this._handleFavoriteClick);
+        this._filmDetailsCardComponent.setWatchedClickHandler(this._handleWatchedClick);
+        this._filmDetailsCardComponent.setWatchlistClickHandler(this._handleWatchlistClick);
+        this._filmDetailsCardComponent.setAddCommentClickHandler(this._handleAddCommentClick);
+        this._filmDetailsCardComponent.setDeleteCommentClickHandler(this._handleDeleteCommentClick);
 
-    render(
-      siteBodyElement,
-      this._filmDetailsCardComponent,
-      RenderPosition.BEFOREEND,
-    );
+        render(
+          siteBodyElement,
+          this._filmDetailsCardComponent,
+          RenderPosition.BEFOREEND,
+        );
+      });
   }
 
   resetView() {

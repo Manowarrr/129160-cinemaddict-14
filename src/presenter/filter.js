@@ -43,8 +43,8 @@ export default class Filter {
     this.init();
   }
 
-  _handleFilterTypeChange(filterType) {
-    if (this._filterModel.getFilter() === filterType) {
+  _handleFilterTypeChange(filterType, isStatisticOpened) {
+    if (this._filterModel.getFilter() === filterType && !isStatisticOpened) {
       return;
     }
 
@@ -76,5 +76,11 @@ export default class Filter {
         count: filter[FilterType.HISTORY](films).length,
       },
     ];
+  }
+
+  removeActiveFilterStyle(currentFilter) {
+    this._filterComponent.getElement()
+      .querySelector(`a[data-filtertype="${currentFilter}"]`)
+      .classList.remove('main-navigation__item--active');
   }
 }
