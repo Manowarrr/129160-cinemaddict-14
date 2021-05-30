@@ -29,7 +29,6 @@ filmSectionPresenter.init();
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
-    console.dir(films);
     /* FOOTER STATISTICS */
     render(
       siteFooterElement,
