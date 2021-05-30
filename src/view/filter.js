@@ -42,7 +42,10 @@ export default class Filter extends AbstractView {
     evt.preventDefault();
     const linkClicked = evt.target.closest('a');
     let isStatisticOpened = false;
-    if(!linkClicked) return;
+    if(!linkClicked) {
+      return;
+    }
+
     if(this.getElement().nextElementSibling.classList.contains('main-navigation__item--active')) {
       isStatisticOpened = true;
       this.getElement()

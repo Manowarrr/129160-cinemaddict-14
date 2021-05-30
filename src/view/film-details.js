@@ -216,7 +216,9 @@ export default class FilmDetailsCard extends SmartView {
 
   _emojiChoiceHandler(evt) {
     const imgClicked = evt.target.closest('img');
-    if(!imgClicked) return;
+    if(!imgClicked) {
+      return;
+    }
 
     this.updateData({
       isEmoji: true,
@@ -255,13 +257,15 @@ export default class FilmDetailsCard extends SmartView {
     evt.preventDefault();
 
     const btnClicked = evt.target.closest('button');
-    if(!btnClicked) return;
+    if(!btnClicked) {
+      return;
+    }
 
     this._callback.deleteCommentClick(btnClicked.dataset.id, FilmDetailsCard.parseDataToFilm(this._data));
   }
 
   _addCommentClickHandler(evt) {
-    if((evt.ctrlKey || evt.metaKey) && evt.keyCode == 13) {
+    if((evt.ctrlKey || evt.metaKey) && evt.keyCode === 13) {
       if(this._data.emojiType && this._textarea.value) {
         const comment = {
           comment: this._textarea.value,

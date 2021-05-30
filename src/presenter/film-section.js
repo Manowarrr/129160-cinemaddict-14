@@ -234,7 +234,9 @@ export default class FilmSection {
         break;
       case UpdateType.MAJOR:
         this.showFilmSection();
-        if(this._statisticsComponent) this._statisticsComponent.hide();
+        if(this._statisticsComponent) {
+          this._statisticsComponent.hide();
+        }
         this._clearFilmSection({resetRenderedFilmsCount: true, resetSortType: true});
         this._renderFilmSection();
         break;
