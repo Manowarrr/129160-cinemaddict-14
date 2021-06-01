@@ -33,4 +33,9 @@ export default class Abstract {
   hide() {
     this.getElement().classList.add('visually-hidden');
   }
+
+  showError() {
+    this.getElement().classList.add('shake');
+    setTimeout(() => this.getElement().classList.remove('shake'), 1000);
+  }
 }

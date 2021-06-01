@@ -27,9 +27,17 @@ export const FilterType = {
 export const PopupState = {
   DELETE: 'deletecomment',
   DISABLEDFORM: 'disabledform',
-  DISABLEDCOMMENT: 'disabledform',
+  DISABLEDCOMMENT: 'disabledcomment',
   DEFAULT: 'default',
   DELETEERROR: 'deleteerror',
   ADDERROR: 'adderror',
   ADD: 'addcomment',
+  CONTROL: 'control',
+  CONTROLERROR: 'controlerror',
+};
+
+export const UserInfoControlsType = {
+  ISWATCHLIST: 'isWatchlist',
+  ISWATCHED: 'isWatched',
+  ISFAVORITE: 'isFavorite',
 };

@@ -1,7 +1,5 @@
-import FooterStatView from './view/footer-stat.js';
 import FilmSectionPresenter from './presenter/film-section.js';
 import FilmsModel from './model/films.js';
-import { render, RenderPosition } from './utils/render.js';
 import { UpdateType } from './const.js';
 import Api from './api.js';
 
@@ -22,6 +20,7 @@ const filmSectionPresenter = new FilmSectionPresenter(
   filmsModel,
   api,
   siteHeaderElement,
+  siteFooterElement,
 );
 
 filmSectionPresenter.init();
@@ -29,11 +28,8 @@ filmSectionPresenter.init();
 api.getFilms()
   .then((films) => {
     filmsModel.setFilms(UpdateType.INIT, films);
-    /* FOOTER STATISTICS */
-    render(
-      siteFooterElement,
-      new FooterStatView(films.length),
-      RenderPosition.BEFOREEND,
-    );
+  })
+  .catch(() => {
+    filmsModel.setFilms(UpdateType.INIT, []);
   });
 
